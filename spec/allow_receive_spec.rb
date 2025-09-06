@@ -105,8 +105,11 @@ RSpec.describe 'allow/receive and argument matching (WeatherStation examples)' d
 
   # 12. Practice prompt for students
   it 'lets students try their own stubs and matchers' do
-    skip 'Student exercise: Write your own stub and matcher example here!'
-    # For example, try stubbing a method with a custom matcher or sequence.
+    station = double('WeatherStation')
+    allow(station).to receive(:temperature).and_return(nil)
+    allow(station).to receive(:temperature).with(anything, 'high').and_return(78.0)
+    expect(station.temperature('foo', 'high')).to eq(78.0)
+    expect(station.temperature('foo')).to be_nil
   end
 
   # 13. Edge case: unstubbed method returns nil
@@ -126,8 +129,10 @@ RSpec.describe 'allow/receive and argument matching (WeatherStation examples)' d
 
   # 15. Students: Try stubbing WeatherStation#humidity or #forecast
   it 'lets students try stubbing humidity or forecast' do
-    skip 'Student exercise: Try stubbing humidity or forecast and test the result'
     station = WeatherStation.new
-    # TODO: Try stubbing humidity or forecast and test the result
+    allow(station).to receive(:humidity).with(anything).and_return(70)
+    allow(station).to receive(:forecast).with(:tomorrow).and_return('Sunny')
+    expect(station.humidity(:nyc)).to eq(70)
+    expect(station.forecast(:tomorrow)).to eq('Sunny')
   end
 end
